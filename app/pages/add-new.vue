@@ -30,26 +30,26 @@ async function addNewFramework() {
 
   loading.value = true;
 
-  const { error } = await useFetch('/api/add', {
-    method: 'post',
-    body: { name, language, url, stars },
-  });
-  loading.value = false;
+  try {
+    await $fetch('/api/add', {
+      method: 'post',
+      body: { name, language, url, stars },
+    });
 
-  if (!error.value) {
     status.message = 'Thanks for your contribution';
     status.type = 'success';
     form.name = '';
     form.language = '';
     form.githubLink = '';
     form.githubStarsCount = 0;
-  }
-  if (error.value) {
+  } catch (error) {
     status.message = error.value.data.message.includes('UNIQUE constraint')
       ? 'Framework exists!'
       : error.value.data.message;
     status.type = 'error';
   }
+  loading.value = false;
+
   if (status.message)
     setTimeout(() => {
       status.message = '';
