@@ -96,6 +96,7 @@ useSeoMeta({
             v-model="form.name"
             type="text"
             name="name"
+            autocomplete="off"
             placeholder="Framework name"
             class="mt-1 w-full rounded-md border-gray-200 shadow-sm sm:text-sm"
             data-cy="name"

@@ -14,12 +14,10 @@ export default defineEventHandler(async (event) => {
       sql: 'DELETE FROM frameworks WHERE id = ?',
       args: [frameworkId],
     });
-    console.log(
-      `Deleted ${result.rowsAffected} row(s) with ID: ${frameworkId}`
-    );
+    return {
+      message: `Framework ${frameworkId} deleted (${result.rowsAffected} row(s) affected)`,
+    };
   } catch (error: unknown) {
-    console.error('Error deleting framework:', error);
+    console.error('(Server) Error deleting framework:', error);
   }
-
-  return { message: `Framework ${frameworkId} deleted` };
 });

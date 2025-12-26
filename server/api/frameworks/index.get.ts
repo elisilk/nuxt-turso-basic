@@ -1,17 +1,14 @@
-export default defineEventHandler(async (event) => {
+export default defineEventHandler(async () => {
+  console.log('Getting frameworks list');
+
   const client = useTurso();
-  const result = await client.execute(
-    'SELECT * FROM frameworks ORDER BY stars DESC'
-  );
 
-  const cityHeader = getHeader(event, 'x-vercel-ip-city');
-  const city = cityHeader ? decodeURIComponent(cityHeader) : '-';
-
-  return {
-    message: 'Frameworks fetched!',
-    data: {
-      frameworks: result.rows,
-      city,
-    },
-  };
+  try {
+    const result = await client.execute(
+      'SELECT * FROM frameworks ORDER BY stars DESC'
+    );
+    return result.rows;
+  } catch (error) {
+    console.error('(Server) Error fetching frameworks list:', error);
+  }
 });

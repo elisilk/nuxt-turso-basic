@@ -1,19 +1,27 @@
 <script setup lang="ts">
-const { data } = await useFetch('/api/frameworks');
-const {
-  data: { frameworks, city },
-} = data.value;
+interface Framework {
+  id: number;
+  name: string;
+  language: string;
+  url: string;
+  stars: number;
+}
+
+const { data: frameworks, refresh } = await useFetch<Framework[]>(
+  '/api/frameworks'
+);
 
 const formatNumber = (val: number) =>
   new Intl.NumberFormat('en-US', { maximumSignificantDigits: 3 }).format(val);
 
-async function handleFrameworkDelete(name: string) {
-  console.log('delete framework:', name);
+async function handleFrameworkDelete(id: number) {
+  console.log('delete framework:', id);
 
   try {
-    await $fetch(`/api/frameworks/${name}`, {
+    await $fetch(`/api/frameworks/${id}`, {
       method: 'DELETE',
     });
+    await refresh();
   } catch (error: unknown) {
     console.error('Framework deletion failed');
     if (error instanceof Error) {
@@ -29,10 +37,6 @@ async function handleFrameworkDelete(name: string) {
 <template>
   <div>
     <h1 class="text-2xl font-bold text-center">Top Web Frameworks</h1>
-
-    <p id="city-name" class="text-center text-gray-400 italic">
-      {{ city }}
-    </p>
 
     <div class="overflow-x-auto rounded-lg border border-gray-200">
       <table class="min-w-full divide-y-2 divide-gray-200 text-sm">
@@ -85,9 +89,9 @@ async function handleFrameworkDelete(name: string) {
                 >Visit</a
               >
             </td>
-            <td>
+            <td class="text-center">
               <button @click="handleFrameworkDelete(framework.id)">
-                Delete
+                <Icon name="heroicons:trash" style="color: black" />
               </button>
             </td>
           </tr>
