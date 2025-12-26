@@ -30,15 +30,15 @@ const frameworks = [
 
 async function main() {
   await client.execute(
-    'create table if not exists frameworks (id integer primary key,name varchar (50) not null,language varchar (50) not null,url text not null,stars integer not null)'
+    'CREATE TABLE IF NOT EXISTS frameworks (id INTEGER PRIMARY KEY, name VARCHAR (50) NOT NULL, language VARCHAR (50) NOT NULL, url TEXT NOT NULL, stars INTEGER NOT NULL)'
   );
   console.log('Migrated db!');
 
   const statements = [
-    'create table if not exists frameworks (id integer primary key,name varchar (50) not null,language varchar (50) not null,url text not null,stars integer not null)',
-    'delete from frameworks',
+    'CREATE TABLE IF NOT EXISTS frameworks (id INTEGER PRIMARY KEY, name VARCHAR (50) NOT NULL, language VARCHAR (50) NOT NULL, url TEXT NOT NULL, stars INTEGER NOT NULL)',
+    'DELETE FROM frameworks',
     ...frameworks.map((framework) => ({
-      sql: 'insert into frameworks(name, language, url, stars) values(?, ?, ?, ?)',
+      sql: 'INSERT INTO frameworks (name, language, url, stars) VALUES (?, ?, ?, ?)',
       args: framework,
     })),
   ];

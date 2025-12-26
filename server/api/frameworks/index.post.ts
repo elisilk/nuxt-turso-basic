@@ -13,7 +13,7 @@ export default defineEventHandler(async (event) => {
   const filter = new Filter();
 
   await client.execute({
-    sql: 'insert into frameworks(name, language, url, stars) values(?, ?, ?, ?)',
+    sql: 'INSERT INTO frameworks (name, language, url, stars) VALUES (?, ?, ?, ?)',
     args: [
       filter.clean(name),
       filter.clean(language),
@@ -23,7 +23,7 @@ export default defineEventHandler(async (event) => {
   });
 
   const framework = await client.execute({
-    sql: 'select * from frameworks where url = ?',
+    sql: 'SELECT * FROM frameworks WHERE url = ?',
     args: [url],
   });
 

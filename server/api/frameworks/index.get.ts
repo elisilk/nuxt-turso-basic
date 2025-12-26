@@ -1,7 +1,7 @@
 export default defineEventHandler(async (event) => {
   const client = useTurso();
   const result = await client.execute(
-    'select * from frameworks order by stars desc'
+    'SELECT * FROM frameworks ORDER BY stars DESC'
   );
 
   const cityHeader = getHeader(event, 'x-vercel-ip-city');

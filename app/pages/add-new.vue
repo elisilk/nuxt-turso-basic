@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 const form = reactive({
   name: '',
   language: '',
@@ -31,7 +31,7 @@ async function addNewFramework() {
   loading.value = true;
 
   try {
-    await $fetch('/api/add', {
+    await $fetch('/api/frameworks', {
       method: 'post',
       body: { name, language, url, stars },
     });
@@ -41,11 +41,18 @@ async function addNewFramework() {
     form.name = '';
     form.language = '';
     form.githubLink = '';
-    form.githubStarsCount = 0;
-  } catch (error) {
-    status.message = error.value.data.message.includes('UNIQUE constraint')
-      ? 'Framework exists!'
-      : error.value.data.message;
+    form.githubStarsCount = '';
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      status.message = error.message;
+      console.error('Error message:', error.message);
+      console.error('Error stack:', error.stack);
+    } else {
+      console.error('An unknown error occurred:', error);
+    }
+    // status.message = error.value.data.message.includes('UNIQUE constraint')
+    //   ? 'Framework exists!'
+    //   : error.value.data.message;
     status.type = 'error';
   }
   loading.value = false;
@@ -129,7 +136,6 @@ useSeoMeta({
           <label for="stars" class="block text-xs font-medium text-gray-700">
             Stars count
           </label>
-
           <input
             id="stars"
             v-model="form.githubStarsCount"

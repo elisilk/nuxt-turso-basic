@@ -1,11 +1,29 @@
-<script setup>
+<script setup lang="ts">
 const { data } = await useFetch('/api/frameworks');
 const {
   data: { frameworks, city },
 } = data.value;
 
-const formatNumber = (val) =>
+const formatNumber = (val: number) =>
   new Intl.NumberFormat('en-US', { maximumSignificantDigits: 3 }).format(val);
+
+async function handleFrameworkDelete(name: string) {
+  console.log('delete framework:', name);
+
+  try {
+    await $fetch(`/api/frameworks/${name}`, {
+      method: 'DELETE',
+    });
+  } catch (error: unknown) {
+    console.error('Framework deletion failed');
+    if (error instanceof Error) {
+      console.error('Error message:', error.message);
+      console.error('Error stack:', error.stack);
+    } else {
+      console.error('An unknown error occurred:', error);
+    }
+  }
+}
 </script>
 
 <template>
@@ -43,6 +61,7 @@ const formatNumber = (val) =>
             >
               Repo
             </th>
+            <th>Delete</th>
           </tr>
         </thead>
 
@@ -65,6 +84,11 @@ const formatNumber = (val) =>
                 class="p-1 text-center px-2 bg-blue-600 hover:bg-blue-700 text-white hover:text-white rounded-md"
                 >Visit</a
               >
+            </td>
+            <td>
+              <button @click="handleFrameworkDelete(framework.id)">
+                Delete
+              </button>
             </td>
           </tr>
         </tbody>
