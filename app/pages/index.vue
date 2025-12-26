@@ -1,15 +1,11 @@
 <script setup lang="ts">
-interface Framework {
-  id: number;
-  name: string;
-  language: string;
-  url: string;
-  stars: number;
-}
+import type { Framework } from '~/types';
 
-const { data: frameworks, refresh } = await useFetch<Framework[]>(
-  '/api/frameworks'
-);
+const {
+  status,
+  data: frameworks,
+  refresh,
+} = await useLazyFetch<Framework[]>('/api/frameworks');
 
 const formatNumber = (val: number) =>
   new Intl.NumberFormat('en-US', { maximumSignificantDigits: 3 }).format(val);
@@ -38,34 +34,19 @@ async function handleFrameworkDelete(id: number) {
   <div>
     <h1 class="text-2xl font-bold text-center">Top Web Frameworks</h1>
 
-    <div class="overflow-x-auto rounded-lg border border-gray-200">
+    <div v-if="status === 'pending'">Loading ...</div>
+    <div v-else class="overflow-x-auto rounded-lg border border-gray-200">
       <table class="min-w-full divide-y-2 divide-gray-200 text-sm">
         <caption class="py-2">
           The list of top web frameworks
         </caption>
         <thead>
           <tr>
-            <th
-              class="whitespace-nowrap px-4 py-2 text-left font-medium text-gray-900"
-            >
-              Name
-            </th>
-            <th
-              class="whitespace-nowrap px-4 py-2 text-left font-medium text-gray-900"
-            >
-              Language
-            </th>
-            <th
-              class="whitespace-nowrap px-4 py-2 text-left font-medium text-gray-900"
-            >
-              GitHub Stars
-            </th>
-            <th
-              class="whitespace-nowrap px-4 py-2 text-left font-medium text-gray-900"
-            >
-              Repo
-            </th>
-            <th>Delete</th>
+            <th class="whitespace-nowrap px-4 py-2 text-left">Name</th>
+            <th class="whitespace-nowrap px-4 py-2 text-left">Language</th>
+            <th class="whitespace-nowrap px-4 py-2 text-left">GitHub Stars</th>
+            <th class="whitespace-nowrap px-4 py-2 text-left">Repo</th>
+            <th class="whitespace-nowrap px-4 py-2 text-left">Delete</th>
           </tr>
         </thead>
 
@@ -78,20 +59,27 @@ async function handleFrameworkDelete(id: number) {
               {{ framework.language }}
             </td>
             <td class="whitespace-nowrap px-4 py-2 text-gray-700">
-              {{ formatNumber(framework.stars) }} ⭐️
+              <div class="flex items-center gap-1">
+                {{ formatNumber(framework.stars) }}
+                <Icon name="lucide:star" class="block" />
+              </div>
             </td>
             <td class="whitespace-nowrap px-4 py-2 text-gray-700">
               <a
                 :href="framework.url"
                 title="GitHub link"
                 target="_blank"
-                class="p-1 text-center px-2 bg-blue-600 hover:bg-blue-700 text-white hover:text-white rounded-md"
-                >Visit</a
-              >
+                class="inline-flex p-2 rounded-md hover:bg-gray-100"
+                ><Icon name="lucide:github"
+              /></a>
             </td>
-            <td class="text-center">
-              <button @click="handleFrameworkDelete(framework.id)">
-                <Icon name="heroicons:trash" style="color: black" />
+            <td class="whitespace-nowrap px-4 py-2 text-gray-700">
+              <button
+                class="inline-flex p-2 rounded-md hover:bg-gray-100"
+                title="delete this item"
+                @click="handleFrameworkDelete(framework.id)"
+              >
+                <Icon name="lucide:trash-2" />
               </button>
             </td>
           </tr>
