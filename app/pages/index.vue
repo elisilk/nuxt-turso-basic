@@ -7,26 +7,12 @@ const {
   refresh,
 } = await useLazyFetch<Framework[]>('/api/frameworks');
 
-const formatNumber = (val: number) =>
-  new Intl.NumberFormat('en-US', { maximumSignificantDigits: 3 }).format(val);
+async function handleRowUpdated() {
+  await refresh();
+}
 
-async function handleFrameworkDelete(id: number) {
-  console.log('delete framework:', id);
-
-  try {
-    await $fetch(`/api/frameworks/${id}`, {
-      method: 'DELETE',
-    });
-    await refresh();
-  } catch (error: unknown) {
-    console.error('Framework deletion failed');
-    if (error instanceof Error) {
-      console.error('Error message:', error.message);
-      console.error('Error stack:', error.stack);
-    } else {
-      console.error('An unknown error occurred:', error);
-    }
-  }
+async function handleRowDeleted() {
+  await refresh();
 }
 </script>
 
@@ -51,40 +37,33 @@ async function handleFrameworkDelete(id: number) {
         </thead>
 
         <tbody v-if="frameworks" class="divide-y divide-gray-200">
-          <tr v-for="(framework, key) of frameworks" :key="key">
-            <td class="whitespace-nowrap px-4 py-2 font-medium text-gray-900">
-              {{ framework.name }}
-            </td>
-            <td class="whitespace-nowrap px-4 py-2 text-gray-700">
-              {{ framework.language }}
-            </td>
-            <td class="whitespace-nowrap px-4 py-2 text-gray-700">
-              <div class="flex items-center gap-1">
-                {{ formatNumber(framework.stars) }}
-                <Icon name="lucide:star" class="block" />
-              </div>
-            </td>
-            <td class="whitespace-nowrap px-4 py-2 text-gray-700">
-              <a
-                :href="framework.url"
-                title="GitHub link"
-                target="_blank"
-                class="inline-flex p-2 rounded-md hover:bg-gray-100"
-                ><Icon name="lucide:github"
-              /></a>
-            </td>
-            <td class="whitespace-nowrap px-4 py-2 text-gray-700">
-              <button
-                class="inline-flex p-2 rounded-md hover:bg-gray-100"
-                title="delete this item"
-                @click="handleFrameworkDelete(framework.id)"
-              >
-                <Icon name="lucide:trash-2" />
-              </button>
-            </td>
-          </tr>
+          <TableRow
+            v-for="(framework, key) of frameworks"
+            :key="key"
+            :framework="framework"
+            @updated="handleRowUpdated"
+            @deleted="handleRowDeleted"
+          />
         </tbody>
       </table>
     </div>
   </div>
 </template>
+
+<style scoped>
+.editable {
+  cursor: pointer;
+}
+
+.editable:hover .editable__edit-icon {
+  opacity: 1;
+}
+
+.editable__edit-icon {
+  width: 1rem;
+  height: 1rem;
+  opacity: 0;
+  margin-left: 0.25rem;
+  transition: opacity 0.2s;
+}
+</style>

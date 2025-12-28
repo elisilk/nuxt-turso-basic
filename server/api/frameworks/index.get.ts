@@ -1,6 +1,4 @@
 export default defineEventHandler(async () => {
-  console.log('Getting frameworks list');
-
   const client = useTurso();
 
   try {
