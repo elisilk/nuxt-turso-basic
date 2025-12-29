@@ -22,8 +22,10 @@ useSeoMeta({
 
       <p>
         Built with
-        <ULink to="https://nuxt.com" external target="_blank">Nuxt</ULink> and
-        <ULink to="https://turso.tech" external target="_blank">Turso</ULink>.
+        <ULink to="https://nuxt.com" external target="_blank">Nuxt</ULink>,
+        <ULink to="https://turso.tech" external target="_blank">Turso</ULink>,
+        and
+        <ULink to="https://ui.nuxt.com" external target="_blank">Nuxt UI</ULink>
       </p>
     </UPageBody>
   </UPage>

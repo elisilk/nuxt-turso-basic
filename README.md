@@ -4,11 +4,12 @@ A website listing top web frameworks made with [Nuxt], [Turso], and [Nuxt UI].
 
 Adapted from the [Top Web Frameworks](https://github.com/tursodatabase/examples/tree/master/app-top-web-frameworks) example app found in the [Nuxt + Turso guide](https://docs.turso.tech/sdk/ts/guides/nuxt).
 
-## Technologies used
+## Technologies Used
 
-- [Nuxt]
-- [Turso]
-- [Nuxt UI]
+- [Nuxt] - Framework
+- [Turso] - Database
+- [Nuxt UI] - UI
+- [Netlify] - Deployment
 
 ---
 
@@ -179,5 +180,6 @@ To clone and deploy this project to Vercel, click on the button below.
 [Nuxt]: https://nuxt.com/
 [Turso]: https://turso.tech/
 [Nuxt UI]: https://ui.nuxt.com/
+[Netlify]: https://www.netlify.com/
 [deployment documentation]: https://nuxt.com/docs/getting-started/deployment
 [Install the Turso CLI]: https://docs.turso.tech/reference/turso-cli#installation
