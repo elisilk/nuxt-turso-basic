@@ -1,6 +1,6 @@
 # [Top Web Frameworks]
 
-A website listing top web frameworks made with [Nuxt] and [Turso].
+A website listing top web frameworks made with [Nuxt], [Turso], and [Nuxt UI].
 
 Adapted from the [Top Web Frameworks](https://github.com/tursodatabase/examples/tree/master/app-top-web-frameworks) example app found in the [Nuxt + Turso guide](https://docs.turso.tech/sdk/ts/guides/nuxt).
 
@@ -8,7 +8,7 @@ Adapted from the [Top Web Frameworks](https://github.com/tursodatabase/examples/
 
 - [Nuxt]
 - [Turso]
-- [TailwindCSS]
+- [Nuxt UI]
 
 ---
 
@@ -49,19 +49,25 @@ Check out the [deployment documentation] for more information.
 
 ## Project Structure
 
-This project is using [Nuxt](https://nuxt.com), the intuitive Vue framework.
+This project is using [Nuxt], the intuitive Vue framework.
 
 Inside your project, you'll see the following directory structure:
 
 ```
 └── pages/
-│   ├── about.vue
-│   ├── add-new.vue
-│   └── index.vue
+│   ├── index.vue
+│   ├── add.vue
+│   ├── old/
+│   │   ├── index.vue
+│   │   └── add.vue
+│   └── about.vue
 ├── server
 │   ├── api
-│   │   ├── add.post.ts
-│   │   └── frameworks.get.ts
+│   │   ├── frameworks
+│   │   │   ├── index.get.ts
+│   │   │   ├── index.post.ts
+│   │   │   ├── [id].put.ts
+│   │   │   └── [id].delete.ts
 │   └── utils
 │       └── turso.ts
 │── app.vue
@@ -71,8 +77,7 @@ Inside your project, you'll see the following directory structure:
 - `app.vue` is the main layout of the app
 - The files under `/server/api` are endpoints.
 
-The helper functions under `/server/utils` are auto-imported into the endpoint
-files.
+The helper functions under `/server/utils` are auto-imported into the endpoint files.
 
 ## Setting up the database
 
@@ -101,9 +106,7 @@ And, to create an authentication token for your database, run:
 turso db tokens create web-frameworks
 ```
 
-Add a `.env` file at the root of the project and inside it add the values
-obtained above as the database url and authentication token for your Turso
-database.
+Add a `.env` file at the root of the project and inside it add the values obtained above as the database url and authentication token for your Turso database.
 
 ```txt
 NUXT_TURSO_DB_URL=
@@ -175,6 +178,6 @@ To clone and deploy this project to Vercel, click on the button below.
 [Top Web Frameworks]: https://es-nuxt-turso-basic.netlify.app/
 [Nuxt]: https://nuxt.com/
 [Turso]: https://turso.tech/
-[TailwindCSS]: https://tailwindcss.com
+[Nuxt UI]: https://ui.nuxt.com/
 [deployment documentation]: https://nuxt.com/docs/getting-started/deployment
 [Install the Turso CLI]: https://docs.turso.tech/reference/turso-cli#installation
