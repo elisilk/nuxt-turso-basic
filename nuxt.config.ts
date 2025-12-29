@@ -2,7 +2,8 @@
 export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
   devtools: { enabled: true },
-  modules: ['@nuxt/eslint', '@nuxtjs/tailwindcss', '@nuxt/icon'],
+  modules: ['@nuxt/eslint', '@nuxt/ui'],
+  css: ['~/assets/css/main.css'],
 
   runtimeConfig: {
     turso: {

@@ -66,17 +66,19 @@ async function handleFrameworkDelete(id: number) {
 
 <template>
   <tr>
-    <td class="whitespace-nowrap px-4 py-2 font-medium text-gray-900">
+    <td
+      class="whitespace-nowrap px-4 py-2 font-medium text-gray-900 dark:text-gray-100"
+    >
       <div
         v-if="!isEditing"
         class="flex items-center gap-1 editable"
         @click="startEditing"
       >
         {{ framework.name }}
-        <Icon name="lucide:pencil" class="block editable__edit-icon" />
+        <Icon name="i-lucide-pencil" class="block editable__edit-icon" />
       </div>
       <div v-else class="flex items-center gap-1 editable">
-        <input
+        <UInput
           v-model="editedName"
           type="text"
           autofocus
@@ -84,43 +86,61 @@ async function handleFrameworkDelete(id: number) {
           @keyup.esc="cancelEditing"
         />
         <Icon
-          name="lucide:check"
+          name="i-lucide-check"
           class="block editable__edit-icon"
           @click="handleRename"
         />
         <Icon
-          name="lucide:x"
+          name="i-lucide-x"
           class="block editable__edit-icon"
           @click="cancelEditing"
         />
       </div>
     </td>
-    <td class="whitespace-nowrap px-4 py-2 text-gray-700">
+    <td class="whitespace-nowrap px-4 py-2 text-gray-700 dark:text-gray-300">
       {{ framework.language }}
     </td>
-    <td class="whitespace-nowrap px-4 py-2 text-gray-700">
+    <td class="whitespace-nowrap px-4 py-2 text-gray-700 dark:text-gray-300">
       <div class="flex items-center gap-1">
         {{ formatNumber(framework.stars) }}
-        <Icon name="lucide:star" class="block" />
+        <Icon name="i-lucide-star" class="block" />
       </div>
     </td>
-    <td class="whitespace-nowrap px-4 py-2 text-gray-700">
+    <td class="whitespace-nowrap px-4 py-2 text-gray-700 dark:text-gray-300">
       <a
         :href="framework.url"
         title="GitHub link"
         target="_blank"
-        class="inline-flex p-2 rounded-md hover:bg-gray-100"
-        ><Icon name="lucide:github"
+        class="inline-flex p-2 rounded-md hover:bg-gray-200 dark:hover:bg-gray-700"
+        ><Icon name="i-lucide-github"
       /></a>
     </td>
-    <td class="whitespace-nowrap px-4 py-2 text-gray-700">
+    <td class="whitespace-nowrap px-4 py-2 text-gray-700 dark:text-gray-300">
       <button
-        class="inline-flex p-2 rounded-md hover:bg-gray-100"
+        class="inline-flex p-2 rounded-md cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700"
         title="delete this item"
         @click="handleFrameworkDelete(framework.id)"
       >
-        <Icon name="lucide:trash-2" />
+        <Icon name="i-lucide-trash-2" />
       </button>
     </td>
   </tr>
 </template>
+
+<style scoped>
+.editable {
+  cursor: pointer;
+}
+
+.editable:hover .editable__edit-icon {
+  opacity: 1;
+}
+
+.editable__edit-icon {
+  width: 1rem;
+  height: 1rem;
+  opacity: 0;
+  margin-left: 0.25rem;
+  transition: opacity 0.2s;
+}
+</style>

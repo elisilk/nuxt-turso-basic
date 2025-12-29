@@ -70,10 +70,10 @@ useSeoMeta({
 </script>
 
 <template>
-  <div>
-    <h1>Submit a framework</h1>
+  <UPage>
+    <UPageHeader title="Add a New Framework" />
 
-    <div class="px-4 md:px-8 lg:px-12">
+    <UPageBody>
       <div
         v-show="status.message"
         id="submission-status-message"
@@ -86,75 +86,50 @@ useSeoMeta({
         {{ status.message }}
       </div>
 
-      <form action="" @submit.prevent="addNewFramework">
-        <div>
-          <label for="name" class="block text-xs font-medium text-gray-700">
-            Name
-          </label>
-          <input
+      <form class="grid gap-4" @submit.prevent="addNewFramework">
+        <div class="grid gap-2">
+          <label for="name">Name</label>
+          <UInput
             id="name"
             v-model="form.name"
-            type="text"
-            name="name"
-            autocomplete="off"
             placeholder="Framework name"
-            class="mt-1 w-full rounded-md border-gray-200 shadow-sm sm:text-sm"
-            data-cy="name"
+            autocomplete="off"
+            size="xl"
           />
         </div>
 
-        <div>
-          <label for="language" class="block text-xs font-medium text-gray-700">
-            Language
-          </label>
-          <input
+        <div class="grid gap-2">
+          <label for="language">Language</label>
+          <UInput
             id="language"
             v-model="form.language"
-            type="text"
-            name="language"
             placeholder="Programming Language"
-            class="mt-1 w-full rounded-md border-gray-200 shadow-sm sm:text-sm"
-            data-cy="programming-language"
+            size="xl"
           />
         </div>
 
-        <div>
-          <label for="link" class="block text-xs font-medium text-gray-700">
-            Github
-          </label>
-          <input
+        <div class="grid gap-2">
+          <label for="language">GitHub</label>
+          <UInput
             id="link"
             v-model="form.githubLink"
-            type="text"
-            name="github_link"
             placeholder="GitHub link"
-            class="mt-1 w-full rounded-md border-gray-200 shadow-sm sm:text-sm"
-            data-cy="github-link"
+            size="xl"
+          />
+        </div>
+
+        <div class="grid gap-2">
+          <label for="language">Stars Count</label>
+          <UInput
+            id="link"
+            v-model="form.githubStarsCount"
+            placeholder="GitHub stars count"
+            size="xl"
           />
         </div>
 
         <div>
-          <label for="stars" class="block text-xs font-medium text-gray-700">
-            Stars count
-          </label>
-          <input
-            id="stars"
-            v-model="form.githubStarsCount"
-            type="text"
-            name="github_stars_count"
-            placeholder="GitHub stars count"
-            class="mt-1 w-full rounded-md border-gray-200 shadow-sm sm:text-sm"
-            data-cy="github-stars-count"
-          />
-        </div>
-
-        <div class="flex justify-center p-2">
-          <button
-            type="submit"
-            class="py-2 px-4 text-white font-semibold bg-blue-600 rounded-md hover:bg-blue-700 focus:relative flex space-x-2 justify-between items-center"
-            title="View Orders"
-            data-cy="submit"
-          >
+          <UButton type="submit" title="Submit the new framework" size="xl">
             <span>Submit</span>
             <svg
               v-if="loading"
@@ -167,9 +142,9 @@ useSeoMeta({
                 d="M18.364 5.636L16.95 7.05A7 7 0 1 0 19 12h2a9 9 0 1 1-2.636-6.364z"
               />
             </svg>
-          </button>
+          </UButton>
         </div>
       </form>
-    </div>
-  </div>
+    </UPageBody>
+  </UPage>
 </template>
