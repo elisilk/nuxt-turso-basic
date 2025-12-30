@@ -11,10 +11,11 @@ const UDropdownMenu = resolveComponent('UDropdownMenu');
 const overlay = useOverlay();
 const modal = overlay.create(ConfirmModal);
 
-const { status, data, refresh } = await useLazyFetch<Framework[]>(
-  '/api/frameworks'
-);
+const { status, data } = await useLazyFetch<Framework[]>('/api/frameworks', {
+  key: 'frameworks',
+});
 
+const refreshing = ref(false);
 const toast = useToast();
 
 async function handleItemDelete(id: number) {
@@ -33,7 +34,7 @@ async function handleItemDelete(id: number) {
       description: 'The framework was deleted.',
       color: 'success',
     });
-    await refresh();
+    await handleRefresh();
   } catch (error: unknown) {
     console.error('Framework deletion failed');
     if (error instanceof Error) {
@@ -50,16 +51,13 @@ async function handleItemEdit(id: number) {
 }
 
 async function handleRefresh() {
-  await refresh();
+  refreshing.value = true;
+  try {
+    await refreshNuxtData(['frameworks']);
+  } finally {
+    refreshing.value = false;
+  }
 }
-
-// async function handleRowUpdated() {
-//   await refresh();
-// }
-
-// async function handleRowDeleted() {
-//   await refresh();
-// }
 
 const formatNumber = (val: number) =>
   new Intl.NumberFormat('en-US', { maximumSignificantDigits: 3 }).format(val);
@@ -133,6 +131,16 @@ const columns: TableColumn<Framework>[] = [
     <UPageHeader title="Top Web Frameworks">
       <template #links>
         <UButton
+          v-if="refreshing"
+          icon="i-lucide-refresh-cw-off"
+          size="md"
+          color="neutral"
+          variant="subtle"
+          aria-label="Actively refreshing the frameworks data"
+          disabled
+        />
+        <UButton
+          v-else
           icon="i-lucide-refresh-ccw"
           size="md"
           color="neutral"
