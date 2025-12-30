@@ -11,7 +11,11 @@ const UDropdownMenu = resolveComponent('UDropdownMenu');
 const overlay = useOverlay();
 const modal = overlay.create(ConfirmModal);
 
-const { status, data } = await useLazyFetch<Framework[]>('/api/frameworks', {
+const {
+  data: frameworks,
+  pending,
+  error,
+} = await useLazyFetch<Framework[]>('/api/frameworks', {
   key: 'frameworks',
 });
 
@@ -75,7 +79,28 @@ const columns: TableColumn<Framework>[] = [
   },
   {
     accessorKey: 'stars',
-    header: 'GitHub Stars',
+    header: ({ column }) => {
+      const isSorted = column.getIsSorted();
+
+      return h(UButton, {
+        color: 'neutral',
+        variant: 'ghost',
+        label: 'GitHub Stars',
+        icon: isSorted
+          ? isSorted === 'asc'
+            ? 'i-lucide-arrow-up-narrow-wide'
+            : 'i-lucide-arrow-down-wide-narrow'
+          : 'i-lucide-arrow-up-down',
+        class: '-mx-2.5',
+        onClick: () => column.toggleSorting(column.getIsSorted() === 'asc'),
+      });
+    },
+    meta: {
+      class: {
+        th: 'text-right',
+        td: 'text-right font-mono',
+      },
+    },
     cell: ({ row }) => formatNumber(row.getValue('stars')),
   },
   {
@@ -124,6 +149,13 @@ const columns: TableColumn<Framework>[] = [
     },
   },
 ];
+
+const sorting = ref([
+  {
+    id: 'stars',
+    desc: true,
+  },
+]);
 </script>
 
 <template>
@@ -159,8 +191,14 @@ const columns: TableColumn<Framework>[] = [
       </template>
     </UPageHeader>
     <UPageBody>
-      <div v-if="status === 'pending'">Loading ...</div>
-      <UTable v-else :data :columns class="flex-1" />
+      <pre v-if="error">{{ error }}</pre>
+      <UTable
+        v-else
+        v-model:sorting="sorting"
+        :data="frameworks"
+        :columns
+        :loading="pending"
+      />
     </UPageBody>
   </UPage>
 </template>
