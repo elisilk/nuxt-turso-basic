@@ -12,7 +12,7 @@ const items = computed<NavigationMenuItem[]>(() => [
   },
   {
     label: 'Old Format',
-    to: '/old/',
+    defaultOpen: true,
     children: [
       {
         label: 'Listing',

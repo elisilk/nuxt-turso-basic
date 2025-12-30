@@ -12,23 +12,31 @@ export default defineEventHandler(async (event) => {
   const client = useTurso();
   const filter = new Filter();
 
-  await client.execute({
-    sql: 'INSERT INTO frameworks (name, language, url, stars) VALUES (?, ?, ?, ?)',
-    args: [
-      filter.clean(name),
-      filter.clean(language),
-      filter.clean(url),
-      stars,
-    ],
-  });
+  try {
+    await client.execute({
+      sql: 'INSERT INTO frameworks (name, language, url, stars) VALUES (?, ?, ?, ?)',
+      args: [
+        filter.clean(name),
+        filter.clean(language),
+        filter.clean(url),
+        stars,
+      ],
+    });
 
-  const framework = await client.execute({
-    sql: 'SELECT * FROM frameworks WHERE url = ?',
-    args: [url],
-  });
+    const framework = await client.execute({
+      sql: 'SELECT * FROM frameworks WHERE url = ?',
+      args: [url],
+    });
 
-  return {
-    message: 'Framework added!',
-    data: framework.rows,
-  };
+    return {
+      message: 'Framework added!',
+      data: framework.rows,
+    };
+  } catch (error) {
+    console.error('(Server) Error adding new framework:', error);
+    throw createError({
+      message: 'Server error!',
+      statusCode: 409,
+    });
+  }
 });

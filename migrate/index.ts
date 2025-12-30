@@ -29,13 +29,16 @@ const frameworks = [
 ];
 
 async function main() {
-  await client.execute(
-    'CREATE TABLE IF NOT EXISTS frameworks (id INTEGER PRIMARY KEY, name VARCHAR (50) NOT NULL, language VARCHAR (50) NOT NULL, url TEXT NOT NULL, stars INTEGER NOT NULL)'
-  );
-  console.log('Migrated db!');
+  // await client.execute(
+  //   'CREATE TABLE IF NOT EXISTS frameworks (id INTEGER PRIMARY KEY, name VARCHAR (50) NOT NULL, language VARCHAR (50) NOT NULL, url TEXT NOT NULL, stars INTEGER NOT NULL)'
+  // );
+  // console.log('Migrated db!');
 
   const statements = [
+    'DROP TABLE IF EXISTS frameworks',
     'CREATE TABLE IF NOT EXISTS frameworks (id INTEGER PRIMARY KEY, name VARCHAR (50) NOT NULL, language VARCHAR (50) NOT NULL, url TEXT NOT NULL, stars INTEGER NOT NULL)',
+    'CREATE UNIQUE INDEX idx_frameworks_name ON frameworks (name)',
+    'CREATE UNIQUE INDEX idx_frameworks_url ON frameworks (url)',
     'DELETE FROM frameworks',
     ...frameworks.map((framework) => ({
       sql: 'INSERT INTO frameworks (name, language, url, stars) VALUES (?, ?, ?, ?)',
