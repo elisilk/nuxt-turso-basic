@@ -7,7 +7,7 @@ const props = defineProps<{
 
 const emit = defineEmits(['updated', 'deleted']);
 
-const editedName = ref('');
+const editedName = ref<string | undefined>('');
 const isEditing = ref(false);
 
 function startEditing() {
@@ -21,14 +21,14 @@ function cancelEditing() {
 }
 
 async function handleRename() {
-  if (!editedName.value.trim()) return;
+  if (!editedName.value || !editedName.value.trim()) return;
   if (editedName.value.trim() === props.framework.name) return;
 
   try {
-    await $fetch(`/api/frameworks/${props.framework.id}`, {
-      method: 'PUT',
-      body: { newName: editedName.value.trim() },
-    });
+    // await $fetch(`/api/frameworks/${props.framework.id}`, {
+    //   method: 'PUT',
+    //   body: { newName: editedName.value.trim() },
+    // });
     isEditing.value = false;
     editedName.value = '';
     emit('updated');
@@ -102,7 +102,7 @@ async function handleFrameworkDelete(id: number) {
     </td>
     <td class="whitespace-nowrap px-4 py-2 text-gray-700 dark:text-gray-300">
       <div class="flex items-center gap-1">
-        {{ formatNumber(framework.stars) }}
+        {{ framework.stars ? formatNumber(framework.stars) : 'undefined' }}
         <Icon name="i-lucide-star" class="block" />
       </div>
     </td>

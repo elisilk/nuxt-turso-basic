@@ -2,7 +2,6 @@ import { Filter } from 'bad-words';
 
 export default defineEventHandler(async (event) => {
   const { name, language, url, stars } = await readBody(event);
-
   if (!name || !language || !url || !stars)
     throw createError({
       message: 'Missing fields!',

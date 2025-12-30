@@ -4,19 +4,41 @@ import type { Framework } from '~/types';
 type NewFramework = Omit<Framework, 'id'>;
 
 useSeoMeta({
-  title: 'Contribute to the frameworks list',
+  title: 'Edit a framework',
 });
+
+const route = useRoute();
+const frameworkId = route.params.id;
+
+const { status, data, error } = await useLazyFetch<Framework>(
+  `/api/frameworks/${frameworkId}`
+);
+
+if (error.value) {
+  console.error('Error fetching data:', error.value);
+}
 
 const formRef = ref();
 
-const getFormInitialState = () => ({
-  name: undefined,
-  language: undefined,
-  url: undefined,
-  stars: undefined,
+const formState: NewFramework = reactive({
+  name: data.value?.name || undefined,
+  language: data.value?.language || undefined,
+  url: data.value?.url || undefined,
+  stars: data.value?.stars || undefined,
 });
 
-const formState: NewFramework = reactive(getFormInitialState());
+watch(
+  data,
+  () => {
+    if (data) {
+      formState.name = data.value?.name;
+      formState.language = data.value?.language;
+      formState.url = data.value?.url;
+      formState.stars = data.value?.stars;
+    }
+  },
+  { deep: true }
+);
 
 type Schema = typeof formState;
 
@@ -34,17 +56,18 @@ const loading = ref(false);
 const toast = useToast();
 
 async function submitForm(event: FormSubmitEvent<Schema>) {
+  console.log(event.data);
   const { name, language, url, stars } = event.data;
   loading.value = true;
   try {
-    await $fetch('/api/frameworks', {
-      method: 'POST',
+    await $fetch(`/api/frameworks/${frameworkId}`, {
+      method: 'PUT',
       body: { name, language, url, stars },
     });
 
     toast.add({
       title: 'Success',
-      description: 'The new framework was added.',
+      description: 'The framework was updated.',
       color: 'success',
     });
     await navigateTo('/');
@@ -59,25 +82,21 @@ async function submitForm(event: FormSubmitEvent<Schema>) {
 
   loading.value = false;
 }
-
-function resetForm() {
-  formRef.value.clear();
-  Object.assign(formState, getFormInitialState());
-}
 </script>
 
 <template>
   <UPage>
-    <UPageHeader title="Add a New Framework" />
+    <UPageHeader title="Edit a Framework" />
 
     <UPageBody>
+      <div v-if="status === 'pending'">Loading ...</div>
       <UForm
+        v-else
         ref="formRef"
         :validate="validate"
         :state="formState"
         class="space-y-4"
         @submit="submitForm"
-        @reset="resetForm"
       >
         <UFormField label="Framework Name" name="name" required>
           <UInput v-model="formState.name" size="xl" class="w-full" />
@@ -97,9 +116,6 @@ function resetForm() {
 
         <div class="flex gap-2">
           <UButton type="submit"> Submit </UButton>
-          <UButton type="reset" color="neutral" variant="subtle">
-            Reset
-          </UButton>
         </div>
       </UForm>
     </UPageBody>

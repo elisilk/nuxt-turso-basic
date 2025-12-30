@@ -32,7 +32,7 @@ async function addNewFramework() {
 
   try {
     await $fetch('/api/frameworks', {
-      method: 'post',
+      method: 'POST',
       body: { name, language, url, stars },
     });
 

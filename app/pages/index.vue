@@ -39,6 +39,10 @@ async function handleItemDelete(id: number) {
   }
 }
 
+async function handleItemEdit(id: number) {
+  await navigateTo(`/edit/${id}`);
+}
+
 async function handleRefresh() {
   console.log('refreshing');
   await refresh();
@@ -79,7 +83,7 @@ const columns: TableColumn<Framework>[] = [
           label: 'Edit',
           icon: 'i-lucide-edit',
           onSelect() {
-            console.log(`Edit: ${row.original.id}`);
+            handleItemEdit(row.original.id);
           },
         },
         {
@@ -87,7 +91,6 @@ const columns: TableColumn<Framework>[] = [
           icon: 'i-lucide-trash',
           color: 'error',
           onSelect() {
-            console.log(`Delete: ${row.original.id}`);
             handleItemDelete(row.original.id);
           },
         },
