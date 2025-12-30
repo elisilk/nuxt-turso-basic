@@ -15,6 +15,8 @@ const { status, data, refresh } = await useLazyFetch<Framework[]>(
   '/api/frameworks'
 );
 
+const toast = useToast();
+
 async function handleItemDelete(id: number) {
   // confirm the deletion request
   const modalInstance = modal.open();
@@ -26,7 +28,11 @@ async function handleItemDelete(id: number) {
     await $fetch(`/api/frameworks/${id}`, {
       method: 'DELETE',
     });
-    console.log(`Framework ${id} successfully deleted`);
+    toast.add({
+      title: 'Success',
+      description: 'The framework was deleted.',
+      color: 'success',
+    });
     await refresh();
   } catch (error: unknown) {
     console.error('Framework deletion failed');
@@ -44,7 +50,6 @@ async function handleItemEdit(id: number) {
 }
 
 async function handleRefresh() {
-  console.log('refreshing');
   await refresh();
 }
 

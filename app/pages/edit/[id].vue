@@ -56,7 +56,6 @@ const loading = ref(false);
 const toast = useToast();
 
 async function submitForm(event: FormSubmitEvent<Schema>) {
-  console.log(event.data);
   const { name, language, url, stars } = event.data;
   loading.value = true;
   try {
@@ -72,7 +71,7 @@ async function submitForm(event: FormSubmitEvent<Schema>) {
     });
     await navigateTo('/');
   } catch (error) {
-    console.log(error);
+    console.error(error);
     toast.add({
       title: 'Error',
       description: 'Something went wrong.',

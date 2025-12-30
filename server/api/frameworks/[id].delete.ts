@@ -5,8 +5,6 @@ export default defineEventHandler(async (event) => {
     throw createError({ statusCode: 400, message: 'Framework ID is required' });
   }
 
-  console.log(`Deleting framework with ID: ${frameworkId}`);
-
   const client = useTurso();
 
   try {

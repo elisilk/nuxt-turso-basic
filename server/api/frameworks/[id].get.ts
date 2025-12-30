@@ -8,8 +8,6 @@ export default defineEventHandler(async (event) => {
     });
   }
 
-  console.log(`Getting framework with ID: ${frameworkId}`);
-
   const client = useTurso();
 
   try {

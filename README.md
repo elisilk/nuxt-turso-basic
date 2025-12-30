@@ -57,21 +57,22 @@ Inside your project, you'll see the following directory structure:
 ```
 └── pages/
 │   ├── index.vue
+│   ├── about.vue
 │   ├── add.vue
-│   ├── old/
-│   │   ├── index.vue
-│   │   └── add.vue
-│   └── about.vue
+│   └── old/
+│       ├── index.vue
+│       └── add.vue
 ├── server
 │   ├── api
-│   │   ├── frameworks
-│   │   │   ├── index.get.ts
-│   │   │   ├── index.post.ts
-│   │   │   ├── [id].put.ts
-│   │   │   └── [id].delete.ts
+│   │   └── frameworks
+│   │       ├── index.get.ts
+│   │       ├── index.post.ts
+│   │       ├── [id].get.ts
+│   │       ├── [id].put.ts
+│   │       └── [id].delete.ts
 │   └── utils
 │       └── turso.ts
-│── app.vue
+└── app.vue
 ```
 
 - `src/pages`: Houses the file-based routing files

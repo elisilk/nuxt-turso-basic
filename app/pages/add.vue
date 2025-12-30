@@ -41,7 +41,6 @@ async function submitForm(event: FormSubmitEvent<Schema>) {
       method: 'POST',
       body: { name, language, url, stars },
     });
-
     toast.add({
       title: 'Success',
       description: 'The new framework was added.',
@@ -49,7 +48,7 @@ async function submitForm(event: FormSubmitEvent<Schema>) {
     });
     await navigateTo('/');
   } catch (error) {
-    console.log(error);
+    console.error(error);
     toast.add({
       title: 'Error',
       description: 'Something went wrong.',
